@@ -1,0 +1,54 @@
+import { Resolver, Query, Mutation, Args, Context } from "@nestjs/graphql";
+import { UsersService } from "./users.service";
+import { User } from "./entities/user.entity";
+import { ActivationDto, CreateUserDto, UpdateUserDto } from "./dto/user.dto";
+import { ActivationResponse, RegistrationResponse } from "./types/user.types";
+import { Response } from "express";
+import { Res } from "@nestjs/common";
+
+@Resolver(() => User)
+export class UsersResolver {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Mutation(() => RegistrationResponse)
+  async createUser(
+    @Args("createUserInput") createUserInput: CreateUserDto,
+    @Context() context: { res: Response }
+  ) {
+    const registrationResponse = await this.usersService.createUser(
+      createUserInput,
+      context.res
+    );
+    const { activationToken } = registrationResponse;
+    return {
+      activationToken,
+    };
+  }
+  @Mutation(() => ActivationResponse)
+  async activateUser(@Args("activationDto") activationDto: ActivationDto) {
+    const activationResponse =
+      await this.usersService.activateUser(activationDto);
+
+    const { user } = activationResponse;
+    return user;
+  }
+  @Query(() => [User])
+  getAllUsers() {
+    return this.usersService.getUsers();
+  }
+
+  @Query(() => User)
+  findUserById(@Args("id") id: string) {
+    return this.usersService.findUserById(id);
+  }
+
+  // @Mutation(() => User)
+  // updateUser(@Args("updateUserInput") updateUserInput: UpdateUserInput) {
+  //   return this.usersService.update(updateUserInput.id, updateUserInput);
+  // }
+
+  // @Mutation(() => User)
+  // removeUser(@Args("id", { type: () => String }) id: string) {
+  //   return this.usersService.remove(id);
+  // }
+}

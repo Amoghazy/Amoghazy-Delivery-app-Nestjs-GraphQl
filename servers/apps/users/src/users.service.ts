@@ -121,17 +121,43 @@ export class UsersService {
       throw new UnauthorizedException("User account is not activated");
     }
 
-    const token = new TokenGenerator(this.configService);
+    const token = new TokenGenerator(this.configService, this.jwtService);
     const accessToken = token.generateAccessToken(user.id);
     const refreshToken = token.generateRefreshToken(user.id);
+    return {
+      accessToken,
+      refreshToken,
+      userId: user.id,
+    };
   }
-  async getUserById(userId: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) {
-      throw new NotFoundException("User not found");
-    }
-    return user;
+  async logOut(req: any) {
+    req.refreshtoken = null;
+    req.accesstoken = null;
+    req.user = null;
+
+    return {
+      message: "Logged out successfully",
+    };
   }
+  async getLoginUser(req: any) {
+    // console.log(req);
+    const refreshToken = req.refreshToken;
+    const accessToken = req.accessToken;
+    const userId = req.user.id;
+    return {
+      refreshToken,
+      accessToken,
+      userId,
+    };
+  }
+
+  // async getUserById(userId: string): Promise<User> {
+  //   const user = await this.userRepository.findOne({ where: { id: userId } });
+  //   if (!user) {
+  //     throw new NotFoundException("User not found");
+  //   }
+  //   return user;
+  // }
   async getUsers(): Promise<User[]> {
     const users = await this.prisma.users.findMany({});
     return users;

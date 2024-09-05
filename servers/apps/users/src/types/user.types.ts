@@ -27,12 +27,17 @@ export class ActivationResponse {
 
 @ObjectType()
 export class LoginResponse {
-  @Field(() => User, { nullable: true })
-  user?: User;
-
+  @Field({ nullable: true })
+  userId?: string;
   @Field(() => String, { nullable: true })
-  token?: string;
-
+  refreshToken?: string;
+  @Field(() => String, { nullable: true })
+  accessToken?: string;
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
+}
+@ObjectType()
+export class LogoutResponse {
+  @Field()
+  message: string;
 }

@@ -1,10 +1,21 @@
 import { Resolver, Query, Mutation, Args, Context } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
 import { User } from "./entities/user.entity";
-import { ActivationDto, CreateUserDto, UpdateUserDto } from "./dto/user.dto";
-import { ActivationResponse, RegistrationResponse } from "./types/user.types";
+import {
+  ActivationDto,
+  CreateUserDto,
+  LoginUserDto,
+  UpdateUserDto,
+} from "./dto/user.dto";
+import {
+  ActivationResponse,
+  LoginResponse,
+  LogoutResponse,
+  RegistrationResponse,
+} from "./types/user.types";
 import { Response } from "express";
-import { Res } from "@nestjs/common";
+import { Res, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "./gurds/auth.guard";
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -31,6 +42,24 @@ export class UsersResolver {
 
     const { user } = activationResponse;
     return user;
+  }
+  @Mutation(() => LoginResponse)
+  async loginUser(@Args("loginUserInput") loginUserInput: LoginUserDto) {
+    const res = await this.usersService.login(loginUserInput);
+
+    return res;
+  }
+  @Query(() => LoginResponse)
+  @UseGuards(AuthGuard)
+  async getLoginUsers(@Context() context: { req: any }) {
+    return this.usersService.getLoginUser(context.req);
+  }
+
+  @Query(() => LogoutResponse)
+  @UseGuards(AuthGuard)
+  async logOut(@Context() context: { req: any }) {
+    const res = await this.usersService.logOut(context.req);
+    return res;
   }
   @Query(() => [User])
   getAllUsers() {

@@ -2,7 +2,7 @@ import { InputType, Field } from "@nestjs/graphql";
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
+
   IsString,
   MinLength,
 } from "class-validator";
@@ -28,8 +28,7 @@ export class CreateUserDto {
   isActive: boolean;
   @Field()
   @IsNotEmpty({ message: "Phone number is required" })
-  @IsNumber({}, { message: "Phone number must be a number" })
-  phone: number;
+  phone: string;
 }
 
 @InputType()

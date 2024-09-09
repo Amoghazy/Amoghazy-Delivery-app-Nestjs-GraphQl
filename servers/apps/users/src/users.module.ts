@@ -19,6 +19,12 @@ import { EmailModule } from "./email/email.module";
       autoSchemaFile: {
         federation: 2,
       },
+
+    
+      context: ({ req, res }: { req: Request; res: Response }) => ({
+        req,
+        res,
+      }),
     }),
     EmailModule,
   ],

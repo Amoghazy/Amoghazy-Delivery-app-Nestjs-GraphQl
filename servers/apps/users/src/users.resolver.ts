@@ -14,7 +14,7 @@ import {
   RegistrationResponse,
 } from "./types/user.types";
 import { Response } from "express";
-import { Res, UseGuards } from "@nestjs/common";
+import { HttpCode, HttpStatus, Res, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "./gurds/auth.guard";
 
 @Resolver(() => User)
@@ -22,6 +22,7 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => RegistrationResponse)
+  @HttpCode(HttpStatus.CREATED)
   async createUser(
     @Args("createUserInput") createUserInput: CreateUserDto,
     @Context() context: { res: Response }
@@ -31,6 +32,7 @@ export class UsersResolver {
       context.res
     );
     const { activationToken } = registrationResponse;
+    context.res.status(HttpStatus.CREATED);
     return {
       activationToken,
     };

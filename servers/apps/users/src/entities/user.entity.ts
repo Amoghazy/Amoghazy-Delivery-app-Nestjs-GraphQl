@@ -23,7 +23,7 @@ export class User {
   @Field()
   email: string;
   @Field()
-  phone: number;
+  phone: string;
 
   @Field(() => Avatars, { nullable: true })
   avatar?: Avatars;

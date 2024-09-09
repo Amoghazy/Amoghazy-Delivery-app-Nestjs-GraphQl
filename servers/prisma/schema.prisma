@@ -22,7 +22,7 @@ model Users {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   username  String
   email     String @unique
-  phone     Int  @unique
+  phone     String  @unique
   address   String?
   avatar    Avatars?
   isActive  Boolean @default(false)

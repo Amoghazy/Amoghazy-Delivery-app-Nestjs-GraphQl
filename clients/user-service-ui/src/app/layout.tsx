@@ -31,7 +31,7 @@ export default function RootLayout({
         className={` ${nunito.variable} ${geistMono.variable} antialiased h-screen `}
       >
         <Providers>{children}</Providers>
-        <ToastContainer />
+        
       </body>
     </html>
   );

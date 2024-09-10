@@ -62,10 +62,13 @@ export default function SignUp({
           phone: data.phone,
         },
       });
-      localStorage.setItem("token", response.activationToken);
+     
+      localStorage.setItem("token", response.createUser.activationToken);
       toast.success("User created successfully");
+      setActiveState("activation")
       reset()
     } catch (error: any) {
+      console.log(error);
       toast.error(error.message);
     }
   };
@@ -96,25 +99,7 @@ export default function SignUp({
             )}
           </div>
           <div>
-            <div className={style.flexColumn}>
-              <label>Email </label>
-            </div>
-            <div className={`${style.inputForm} !pl-0 `}>
-              <input
-                type="email"
-                className={` ${style.input} !ml-2`}
-                placeholder="Enter your Email"
-                {...register("email")}
-              />
-            </div>
-            {errors.email?.message && (
-              <p className="alert alert-error p-1 px-4 text-sm mt-2">
-                <PiWarningFill /> <span>{errors.email?.message}</span>
-              </p>
-            )}
-          </div>
-        </section>
-        <div className={style.flexColumn}>
+          <div className={style.flexColumn}>
           <label>Phone </label>
         </div>
         <div className={`${style.inputForm} !pl-0 `}>
@@ -130,6 +115,25 @@ export default function SignUp({
             <PiWarningFill /> <span>{errors.phone?.message}</span>
           </p>
         )}
+          </div>
+        </section>
+       
+         <div className={style.flexColumn}>
+              <label>Email </label>
+            </div>
+            <div className={`${style.inputForm} !pl-0 `}>
+              <input
+                type="email"
+                className={` ${style.input} !ml-2`}
+                placeholder="Enter your Email"
+                {...register("email")}
+              />
+            </div>
+            {errors.email?.message && (
+              <p className="alert alert-error p-1 px-4 text-sm mt-2">
+                <PiWarningFill /> <span>{errors.email?.message}</span>
+              </p>
+            )}
         <section className="grid grid-cols-2 gap-2">
           <div>
             <div className={style.flexColumn}>

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import AuthScreen from "../screens/AuthScreen";
-import Login from "../components/Login";
 
 export default function ProfileDrop() {
   const [logedIn, setLoggedIn] = useState(false);
@@ -63,8 +62,9 @@ export default function ProfileDrop() {
           </>
         )}
       </div>
+
       {
-        openAuth && <AuthScreen/>
+        openAuth && <AuthScreen setOpenAuth={setOpenAuth} />
       }
     </>
   );

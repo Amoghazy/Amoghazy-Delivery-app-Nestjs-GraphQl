@@ -25,11 +25,15 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto, response: Response) {
     const { email, password, username, phone } = createUserDto;
 
-    const existingUser = await this.prisma.users.findUnique({
-      where: { email },
+    const existingUser = await this.prisma.users.findFirst({
+      where: {
+        OR: [{ email }, { phone }],
+      },
     });
     if (existingUser) {
-      throw new BadRequestException("User with this email already exists");
+      throw new BadRequestException(
+        "User with this email or phone already exists"
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,7 +52,7 @@ export class UsersService {
       template: "./activation-mail.ejs",
       activationCode: String(activation.activationCode),
     });
-    const createdUser = await this.prisma.users.create({
+    await this.prisma.users.create({
       data: user,
     });
     return {
@@ -76,7 +80,7 @@ export class UsersService {
     const payload = await this.jwtService.verify(activationToken, {
       secret: this.configService.get("JWT_SECRET"),
     });
-    console.log(payload);
+
     if (!payload) {
       throw new BadRequestException("Invalid activation token");
     }
@@ -95,7 +99,6 @@ export class UsersService {
       where: { email: payload.email },
       data: { isActive: true },
     });
-
     return {
       user,
     };

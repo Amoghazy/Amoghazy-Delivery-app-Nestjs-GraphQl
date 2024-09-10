@@ -21,9 +21,9 @@ export default function Header() {
             className="inline-block -ml-2"
           />
         </Link>
-
         <NavItems />
         <ProfileDrop />
+       
       </div>
     </header>
   );

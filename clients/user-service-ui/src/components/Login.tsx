@@ -9,6 +9,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { PiWarningFill } from "react-icons/pi";
+import { loginUser } from "../graphql/actions/login.action";
+import { useMutation } from "@apollo/client";
+import { toast } from "react-toastify";
 
 const schema = yup
   .object({
@@ -22,10 +25,15 @@ const schema = yup
       .required("Password is required"),
   })
   .required();
-export default function Login({setActiveState}:{
-  setActiveState:(activeSate:string)=>void
+export default function Login({
+  setActiveState,
+  setOpenAuth,
+}: {
+  setActiveState: (activeSate: string) => void;
+  setOpenAuth: (val: boolean) => void;
 }) {
   const [show, setShow] = useState(false);
+  const [loginUserMutation, { loading }] = useMutation(loginUser);
   const {
     register,
     handleSubmit,
@@ -33,11 +41,24 @@ export default function Login({setActiveState}:{
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: { email: string; password: string }) =>
-    console.log(data);
+  const onSubmit = async (data: { email: string; password: string }) => {
+    try {
+      const { data: response } = await loginUserMutation({
+        variables: {
+          email: data.email,
+          password: data.password,
+        },
+      });
+      // localStorage.setItem("token", response.loginUser.token);
+      toast.success("User logged in successfully");
+      setOpenAuth(false);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
   return (
     <>
-      <form className={style.form} onSubmit={handleSubmit(onSubmit)} >
+      <form className={style.form} onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-3xl text-center font-bold">Login</h1>
         <div className={style.flexColumn}>
           <label>Email </label>
@@ -51,13 +72,12 @@ export default function Login({setActiveState}:{
             placeholder="Enter your Email"
             {...register("email")}
           />
-        
         </div>
         {errors.email?.message && (
-            <p className="alert alert-error p-1 px-4 text-sm">
-              <PiWarningFill /> <span>{errors.email?.message}</span>
-            </p>
-          )}
+          <p className="alert alert-error p-1 px-4 text-sm">
+            <PiWarningFill /> <span>{errors.email?.message}</span>
+          </p>
+        )}
         <div className={style.flexColumn}>
           <label>Password </label>
         </div>
@@ -70,7 +90,7 @@ export default function Login({setActiveState}:{
             placeholder="Enter your Password"
             {...register("password")}
           />
-       
+
           {show ? (
             <BiSolidShow
               className="mr-3 cursor-pointer hover:text-slate-900 "
@@ -86,17 +106,21 @@ export default function Login({setActiveState}:{
           )}
         </div>
         {errors.password?.message && (
-            <p className="alert alert-error p-1 px-4 text-sm">
-              <PiWarningFill /> <span>{errors.password?.message}</span>
-            </p>
-          )}
+          <p className="alert alert-error p-1 px-4 text-sm">
+            <PiWarningFill /> <span>{errors.password?.message}</span>
+          </p>
+        )}
         <div className="ml-auto">
           <span className={` ${style.span} `}>Forgot password?</span>
         </div>
-        <button type="submit" className={style.btnsub}>Sign In</button>
+        <button type="submit" className={style.btnsub}>
+          Sign In
+        </button>
         <p className={style.p}>
           Don't have an account yet&nbsp;?{" "}
-          <span className={style.span} onClick={() => setActiveState("signUp")}>Sign Up</span>
+          <span className={style.span} onClick={() => setActiveState("signUp")}>
+            Sign Up
+          </span>
         </p>
         <p className={style.p}>Or sign in with</p>
 

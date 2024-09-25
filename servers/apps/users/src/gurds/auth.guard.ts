@@ -47,6 +47,7 @@ export class AuthGuard implements CanActivate {
       Logger.error(`Error in AuthGuard: ${error.message}`);
       throw new UnauthorizedException("Unauthorized");
     }
+    
     return true;
   }
   private async updateAccessToken(req: any) {

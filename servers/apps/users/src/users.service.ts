@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import { ActivationDto, CreateUserDto, LoginUserDto } from "./dto/user.dto";
+import { ActivationDto, CreateUserDto, LoginUserDto, ResetPasswordDto } from "./dto/user.dto";
 import { User } from "./entities/user.entity";
 import { PrismaService } from "../../../prisma/prisma.service";
 import * as bcrypt from "bcrypt";
@@ -142,25 +142,78 @@ export class UsersService {
       message: "Logged out successfully",
     };
   }
+  async genratePasswordToken(user:User)  {
+   const forgetPasswordToken =  this.jwtService.sign({user},{
+    secret: this.configService.get("JWT_SECRET_FORGET_PASSWORD"),
+    expiresIn:"5m"
+   })
+    return forgetPasswordToken
+  }
+  async forgetPassword(email:string) {
+   const user = await this.prisma.users.findUnique({
+    where:{email}
+   })
+   if(!user){
+    throw new BadRequestException("user not found !")
+   }
+const tokenForget= await this.genratePasswordToken( user)
+const forgetUrl=  this.configService.get("CLIENT_SIDE_URL_USER")+`reset-password?verify=${tokenForget}`
+
+this.emailService.sendMail({
+  name:user.username,
+  subject:"Rest Password",
+  template:"./forgot-password",
+  email,
+  activationCode:forgetUrl
+
+
+})
+
+    return {
+      message: "request for forgetPassword is send! "
+    }
+  }
+
+ async resetPassword(resetPasswordDto:ResetPasswordDto){
+const {password,token}=resetPasswordDto
+if(!token){
+  throw new BadRequestException("Token Invalid Try Again reset password")
+}
+try {
+  const decode = await this.jwtService.verify(token,{
+    secret:this.configService.get("JWT_SECRET_FORGET_PASSWORD")
+  })
+if(!decode || decode?.exp*1000<Date.now()){
+  
+  throw new BadRequestException("Token Invalid Try Again")
+}
+const hashedPassword = await bcrypt.hash(password,10)
+const user = await this.prisma.users.update({where:{id:decode?.user?.id},data:{
+  password:hashedPassword
+}})
+if (!user) {
+  throw new BadRequestException("User not found");
+}
+
+return {user}
+} catch (error) {
+  throw new BadRequestException(" Try Again reset password we have some problem")
+}
+
+ } 
   async getLoginUser(req: any) {
-    // console.log(req);
+  
     const refreshToken = req.refreshToken;
     const accessToken = req.accessToken;
-    const userId = req.user.id;
+    const user = req.user;
     return {
       refreshToken,
       accessToken,
-      userId,
+      user,
     };
   }
 
-  // async getUserById(userId: string): Promise<User> {
-  //   const user = await this.userRepository.findOne({ where: { id: userId } });
-  //   if (!user) {
-  //     throw new NotFoundException("User not found");
-  //   }
-  //   return user;
-  // }
+
   async getUsers(): Promise<User[]> {
     const users = await this.prisma.users.findMany({});
     return users;

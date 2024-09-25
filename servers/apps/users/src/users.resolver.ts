@@ -5,13 +5,16 @@ import {
   ActivationDto,
   CreateUserDto,
   LoginUserDto,
+  ResetPasswordDto,
   UpdateUserDto,
 } from "./dto/user.dto";
 import {
   ActivationResponse,
+  ForgetResponse,
   LoginResponse,
   LogoutResponse,
   RegistrationResponse,
+  ResetResponse,
 } from "./types/user.types";
 import { Response } from "express";
 import { HttpCode, HttpStatus, Res, UseGuards } from "@nestjs/common";
@@ -55,7 +58,7 @@ export class UsersResolver {
   }
   @Query(() => LoginResponse)
   @UseGuards(AuthGuard)
-  async getLoginUsers(@Context() context: { req: any }) {
+  async getLoginUser(@Context() context: { req: any }) {
     return this.usersService.getLoginUser(context.req);
   }
 
@@ -64,6 +67,15 @@ export class UsersResolver {
   async logOut(@Context() context: { req: any }) {
     const res = await this.usersService.logOut(context.req);
     return res;
+  }
+  @Mutation(() => ForgetResponse)
+  async forgetPassword(@Args("email")email:string) {
+    return this.usersService.forgetPassword(email)
+  }
+  @Mutation(() => ResetResponse)
+  async resetPassword(@Args("resetPasswordDto")resetPasswordDto:ResetPasswordDto) {
+   return  this.usersService.resetPassword(resetPasswordDto)
+ 
   }
   @Query(() => [User])
   getAllUsers() {
@@ -75,13 +87,5 @@ export class UsersResolver {
     return this.usersService.findUserById(id);
   }
 
-  // @Mutation(() => User)
-  // updateUser(@Args("updateUserInput") updateUserInput: UpdateUserInput) {
-  //   return this.usersService.update(updateUserInput.id, updateUserInput);
-  // }
-
-  // @Mutation(() => User)
-  // removeUser(@Args("id", { type: () => String }) id: string) {
-  //   return this.usersService.remove(id);
-  // }
+  
 }

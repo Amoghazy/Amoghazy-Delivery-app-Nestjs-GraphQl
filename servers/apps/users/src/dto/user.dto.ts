@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
 
   IsString,
+
   MinLength,
 } from "class-validator";
 
@@ -71,4 +72,17 @@ export class LoginUserDto {
   @IsNotEmpty({ message: "Password is required" })
   @IsString({ message: "Password must be a string" })
   readonly password: string;
+}
+@InputType()
+export class ResetPasswordDto {
+  @Field()
+  @IsNotEmpty({ message: "password is required" })
+  @MinLength(6, { message: "Password must be at least 6 characters long" })
+
+ password:string
+
+  @Field()
+  @IsNotEmpty({ message: "token is required" })
+  @IsString({ message: "token must be a string" })
+  token: string;
 }

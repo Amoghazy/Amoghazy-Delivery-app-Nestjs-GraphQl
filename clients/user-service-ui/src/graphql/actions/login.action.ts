@@ -9,7 +9,7 @@ export const loginUser: DocumentNode = gql`
         password: $password
       }
     ) {
-      userId
+  
       refreshToken
       accessToken
     }

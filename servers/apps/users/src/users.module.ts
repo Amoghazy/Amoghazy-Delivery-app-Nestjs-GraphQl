@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import {
@@ -28,7 +27,7 @@ import { EmailModule } from "./email/email.module";
     }),
     EmailModule,
   ],
-  controllers: [UsersController],
+
   providers: [
     UsersService,
     ConfigService,

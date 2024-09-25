@@ -103,10 +103,11 @@ export default function Verification({
           activationToken: localStorage.getItem("token")!,
         },
       });
+      localStorage.removeItem("token");
       toast.success("User activated successfully");
       setActiveState("login");
     } catch (error: any) {
-      console.log(error.message);
+     
       toast.error(error.message);
     }
   };

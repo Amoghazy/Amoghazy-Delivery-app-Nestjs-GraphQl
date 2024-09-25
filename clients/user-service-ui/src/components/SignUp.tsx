@@ -68,7 +68,7 @@ export default function SignUp({
       setActiveState("activation")
       reset()
     } catch (error: any) {
-      console.log(error);
+   
       toast.error(error.message);
     }
   };

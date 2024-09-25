@@ -12,7 +12,7 @@ import { PiWarningFill } from "react-icons/pi";
 import { loginUser } from "../graphql/actions/login.action";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
-
+import Cookies from "js-cookie";
 const schema = yup
   .object({
     email: yup
@@ -37,6 +37,7 @@ export default function Login({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -49,9 +50,13 @@ export default function Login({
           password: data.password,
         },
       });
-      // localStorage.setItem("token", response.loginUser.token);
+
       toast.success("User logged in successfully");
+      Cookies.set("refreshToken", response.loginUser.refreshToken);
+      Cookies.set("accessToken", response.loginUser.accessToken);
       setOpenAuth(false);
+      reset()
+     setTimeout(()=>{ window.location.reload()},2000)
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -111,7 +116,9 @@ export default function Login({
           </p>
         )}
         <div className="ml-auto">
-          <span className={` ${style.span} `}>Forgot password?</span>
+          <span onClick={()=>{
+            setActiveState("forget-password")
+          }} className={` ${style.span} `}>Forgot password?</span>
         </div>
         <button type="submit" className={style.btnsub}>
           Sign In

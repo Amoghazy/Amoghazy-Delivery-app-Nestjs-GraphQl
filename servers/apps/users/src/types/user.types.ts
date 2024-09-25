@@ -28,7 +28,7 @@ export class ActivationResponse {
 @ObjectType()
 export class LoginResponse {
   @Field({ nullable: true })
-  userId?: string;
+  user?: User;
   @Field(() => String, { nullable: true })
   refreshToken?: string;
   @Field(() => String, { nullable: true })
@@ -40,4 +40,14 @@ export class LoginResponse {
 export class LogoutResponse {
   @Field()
   message: string;
+}
+@ObjectType()
+export class ForgetResponse {
+  @Field()
+  message: string;
+}
+@ObjectType()
+export class ResetResponse {
+  @Field()
+  user: User;
 }

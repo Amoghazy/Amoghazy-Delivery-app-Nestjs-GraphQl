@@ -16,6 +16,8 @@ export class Avatars {
 export class User {
   @Field()
   id: string;
+  @Field({ nullable: true })
+  address: string;
 
   @Field()
   username: string;

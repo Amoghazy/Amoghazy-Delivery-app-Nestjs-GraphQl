@@ -4,6 +4,7 @@ import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./graphql/graphql.setup";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SessionProvider } from "next-auth/react";
 
 export default function Providers({
   children,
@@ -12,6 +13,7 @@ export default function Providers({
 }): React.ReactElement {
   return (
     <ApolloProvider client={apolloClient}>
+      <SessionProvider>
       {children}
       <ToastContainer
         position="top-right"
@@ -23,6 +25,7 @@ export default function Providers({
         draggable
         pauseOnHover
       />
+      </SessionProvider>
     </ApolloProvider>
   );
 }

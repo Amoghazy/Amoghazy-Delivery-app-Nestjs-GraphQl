@@ -2,17 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+
 
 body {
   color: var(--foreground);
@@ -20,8 +11,37 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+:root {
+    --b1: #ffffff; /* Light theme background */
+    --bc: #171717; /* Light theme text */
+    
+    --dark-b1: #0a0a0a; /* Dark theme background */
+    --dark-bc: #ededed; /* Dark theme text */
+       --header-bg-light: #215491; /* Light theme background */
+    --header-bg-dark: #092240; /* Dark theme background */
+    --header-text-light: #171717; /* Light theme text */
+    --header-text-dark: #ffffff; /* Dark theme text */
+}
+
+[data-theme="myLightTheme"] {
+    background-color: var(--b1);
+    color: var(--bc);
+      --header-bg: var(--header-bg-light);
+    --header-text: var(--header-text-light);
+}
+
+[data-theme="dark"] {
+    background-color: var(--dark-b1);
+    color: var(--dark-bc);
+    --header-bg: var(--header-bg-dark);
+    --header-text: var(--header-text-dark);
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+.header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
 }

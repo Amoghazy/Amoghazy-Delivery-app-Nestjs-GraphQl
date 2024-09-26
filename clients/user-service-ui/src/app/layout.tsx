@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "../Providers";
 import { ToastContainer } from "react-toastify";
 
+
 const nunito = localFont({
   src: "./fonts/Nunito-VariableFont_wght.ttf",
   variable: "--font-nunito",
@@ -15,9 +16,14 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+
 export const metadata: Metadata = {
-  title: "Delivery App",
+  title: "FIMTO ",
   description: "Delivery App UI for the Delivery App",
+  icons: {
+    icon: "/stellar-coin_825462.png", 
+  
+  },
 };
 
 export default function RootLayout({
@@ -27,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="dark">
+      <head>
+        <link rel="icon" href="/stellar-coin_825462.png" /> 
+      </head>
       <body
         className={` ${nunito.variable} ${geistMono.variable} antialiased h-screen `}
       >

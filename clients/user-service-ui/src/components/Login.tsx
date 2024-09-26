@@ -13,6 +13,7 @@ import { loginUser } from "../graphql/actions/login.action";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { signIn } from "next-auth/react";
 const schema = yup
   .object({
     email: yup
@@ -132,25 +133,26 @@ export default function Login({
         <p className={style.p}>Or sign in with</p>
 
         <div className="flex justify-around">
-          <button className={style.Btn}>
-            <span className={style.svgContainer}>
-              <FcGoogle />
-            </span>
-            <span className={style.BGa} />
-          </button>
-          <button className={style.Btn}>
-            <span className={style.svgContainer}>
-              <BsTwitterX />
-            </span>
-            <span className={style.BGa} />
-          </button>
-          <button className={style.Btn}>
-            <span className={style.svgContainer}>
-              <AiFillGithub />
-            </span>
-            <span className={style.BGa} />
-          </button>
-        </div>
+  <button className={style.Btn} onClick={() => signIn('google')}>
+    <span className={style.svgContainer}>
+      <FcGoogle />
+    </span>
+    <span className={style.BGa} />
+  </button>
+  <button className={style.Btn} onClick={() => signIn('twitter')}>
+    <span className={style.svgContainer}>
+      <BsTwitterX />
+    </span>
+    <span className={style.BGa} />
+  </button>
+  <button className={style.Btn} onClick={() => signIn('github')}>
+    <span className={style.svgContainer}>
+      <AiFillGithub />
+    </span>
+    <span className={style.BGa} />
+  </button>
+</div>
+
       </form>
     </>
   );

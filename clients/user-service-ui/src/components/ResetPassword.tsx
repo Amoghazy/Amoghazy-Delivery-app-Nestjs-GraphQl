@@ -48,7 +48,7 @@ const ResetPassword=({activeToken}:{activeToken:string})=>{
               token:activeToken
             },
           });
-    console.log(response)
+   
           toast.success("Password Updated Successfully");
     
           reset()

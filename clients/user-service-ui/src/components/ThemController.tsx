@@ -6,21 +6,18 @@ import { MdSunny } from "react-icons/md";
 const ThemeController = () => {
   const [theme, setTheme] = useState("myLightTheme");
 
-  // Toggle the theme when checkbox is clicked
   const toggleTheme = (event:any) => {
     const newTheme = event.target.checked ? "dark" : "myLightTheme";
     setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme); // Change theme
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
-  // On initial load, set the correct theme based on user preference or default to light
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "myLightTheme";
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  // Save the theme to localStorage when it changes
   useEffect(() => {
     localStorage.setItem("theme", theme);
   }, [theme]);
@@ -39,7 +36,7 @@ const ThemeController = () => {
         <MdSunny   size={30}        className="swap-off  fill-current"
  />
 
-        <BsFillMoonStarsFill     size={30}       className="swap-on  fill-current"
+        <BsFillMoonStarsFill     size={20}       className="swap-on  fill-current"
  />
 
       

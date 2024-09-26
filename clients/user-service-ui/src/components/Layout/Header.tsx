@@ -7,7 +7,7 @@ import ThemeController from "../ThemController";
 
 export default function Header() {
   return (
-    <header className="w-full header">
+    <header className="w-full header fixed z-[55]">
       <div className="navbar justify-between w-[90%] mx-auto">
         <Link
           href={"/"}

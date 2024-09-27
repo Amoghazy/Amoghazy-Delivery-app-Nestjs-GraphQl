@@ -26,7 +26,7 @@ jobs:
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: ${{ github.repository_owner  }}
+        username: ${{ github.repository_owner }}
         password: ${{ secrets.DOCKER_TOKEN }}
 
     - name: Build and push first Docker image
@@ -36,8 +36,8 @@ jobs:
         file: ./servers/Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ github.repository_owner }}/server-nestjs-image:latest
-          ghcr.io/${{ github.repository_owner }}/server-nestjs-image:${{ github.sha }}
+          ghcr.io/${{ github.repository_owner | toLowerCase }}/server-nestjs-image:latest
+          ghcr.io/${{ github.repository_owner | toLowerCase }}/server-nestjs-image:${{ github.sha | toLowerCase }}
 
     - name: Build and push second Docker image
       uses: docker/build-push-action@v5
@@ -46,9 +46,5 @@ jobs:
         file: ./clients/user-service-ui/Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ github.repository_owner }}/ui-next-image:latest
-          ghcr.io/${{ github.repository_owner }}/ui-next-image:${{ github.sha }}
-
-    # Optional: Fallback to build without Buildx (uncomment if needed)
-    # - name: Build Docker image without Buildx
-      # run: docker build -t ghcr.io/$ github.repository_owner }}/server-nestjs-image:latest ./servers
+          ghcr.io/${{ github.repository_owner | toLowerCase }}/ui-next-image:latest
+          ghcr.io/${{ github.repository_owner | toLowerCase }}/ui-next-image:${{ github.sha | toLowerCase }}

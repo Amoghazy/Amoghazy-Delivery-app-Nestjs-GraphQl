@@ -15,7 +15,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      - name: Set lower case owner and repo name
+        run: |
+          echo "REPO_LC=${REPO,,}" >> ${GITHUB_ENV}
+        env:
+          REPO: '${{ github.event.repository.name }}'
       - name: Remove existing builder
         run: docker buildx rm builder || true
 
@@ -36,8 +40,8 @@ jobs:
           file: ./servers/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-server-nestjs:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-server-nestjs:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ env.REPO_LC }}-server-nestjs:latest
+            ghcr.io/${{ github.repository_owner }}/${{ env.REPO_LC }}-server-nestjs:${{ github.sha }}
 
       - name: Build and push second Docker image
         uses: docker/build-push-action@v5
@@ -46,5 +50,5 @@ jobs:
           file: ./clients/user-service-ui/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-ui-next:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-ui-next:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ env.REPO_LC }}-ui-next:latest
+            ghcr.io/${{ github.repository_owner }}/${{ env.REPO_LC }}-ui-next:${{ github.sha }}

@@ -34,4 +34,12 @@ jobs:
           ghcr.io/${{ github.repository_owner }}/server-nestjs-image:latest
           ghcr.io/${{ github.repository_owner }}/server-nestjs-image:${{ github.sha }}
 
-    
+    - name: Build and push second Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./clients/user-service-ui
+        file: ./clients/user-service-ui/Dockerfile
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/ui-next-image:latest
+          ghcr.io/${{ github.repository_owner }}/ui-next-image:${{ github.sha }}

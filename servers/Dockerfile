@@ -12,7 +12,7 @@ WORKDIR /app/server
 COPY --from=builder /app/server/dist ./dist
 COPY --from=builder /app/server/package*.json ./
 COPY --from=builder /app/server/node_modules ./node_modules
-COPY --from=builder /app/server/.env ./
+# COPY --from=builder /app/server/.env ./
 ENV NODE_ENV=production
 EXPOSE 3001
 

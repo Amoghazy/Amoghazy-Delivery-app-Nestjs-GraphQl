@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -31,8 +31,8 @@ jobs:
         file: ./servers/Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ github.repository_owner | toLowerCase }}/server-nestjs-image:latest
-          ghcr.io/${{ github.repository_owner | toLowerCase }}/server-nestjs-image:${{ github.sha }}
+          ghcr.io/${{ github.repository_owner }}/server-nestjs-image:latest
+          ghcr.io/${{ github.repository_owner }}/server-nestjs-image:${{ github.sha }}
 
     - name: Build and push second Docker image
       uses: docker/build-push-action@v5
@@ -41,5 +41,5 @@ jobs:
         file: ./clients/user-service-ui/Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ github.repository_owner | toLowerCase }}/ui-next-image:latest
-          ghcr.io/${{ github.repository_owner | toLowerCase }}/ui-next-image:${{ github.sha }}
+          ghcr.io/${{ github.repository_owner }}/ui-next-image:latest
+          ghcr.io/${{ github.repository_owner }}/ui-next-image:${{ github.sha }}

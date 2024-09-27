@@ -1,6 +1,6 @@
 import { FcGoogle } from "react-icons/fc";
 import style from "../css/login.module.css";
-import { BsGithub, BsTwitterX } from "react-icons/bs";
+import { BsTwitterX } from "react-icons/bs";
 import { AiFillGithub } from "react-icons/ai";
 import { FiAtSign, FiLock } from "react-icons/fi";
 import { useState } from "react";
@@ -56,10 +56,16 @@ export default function Login({
       Cookies.set("refreshToken", response.loginUser.refreshToken);
       Cookies.set("accessToken", response.loginUser.accessToken);
       setOpenAuth(false);
-      reset()
-     setTimeout(()=>{ window.location.reload()},2000)
-    } catch (error: any) {
-      toast.error(error.message);
+      reset();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
   return (
@@ -117,15 +123,20 @@ export default function Login({
           </p>
         )}
         <div className="ml-auto">
-          <span onClick={()=>{
-            setActiveState("forget-password")
-          }} className={` ${style.span} `}>Forgot password?</span>
+          <span
+            onClick={() => {
+              setActiveState("forget-password");
+            }}
+            className={` ${style.span} `}
+          >
+            Forgot password?
+          </span>
         </div>
-        <button type="submit" className={style.btnsub}>
+        <button disabled={loading} type="submit" className={style.btnsub}>
           Sign In
         </button>
         <p className={style.p}>
-          Don't have an account yet&nbsp;?{" "}
+          Don&apos;t have an account yet ?{" "}
           <span className={style.span} onClick={() => setActiveState("signUp")}>
             Sign Up
           </span>
@@ -133,26 +144,25 @@ export default function Login({
         <p className={style.p}>Or sign in with</p>
 
         <div className="flex justify-around">
-  <button className={style.Btn} onClick={() => signIn('google')}>
-    <span className={style.svgContainer}>
-      <FcGoogle />
-    </span>
-    <span className={style.BGa} />
-  </button>
-  <button className={style.Btn} onClick={() => signIn('twitter')}>
-    <span className={style.svgContainer}>
-      <BsTwitterX />
-    </span>
-    <span className={style.BGa} />
-  </button>
-  <button className={style.Btn} onClick={() => signIn('github')}>
-    <span className={style.svgContainer}>
-      <AiFillGithub />
-    </span>
-    <span className={style.BGa} />
-  </button>
-</div>
-
+          <button className={style.Btn} onClick={() => signIn("google")}>
+            <span className={style.svgContainer}>
+              <FcGoogle />
+            </span>
+            <span className={style.BGa} />
+          </button>
+          <button className={style.Btn} onClick={() => signIn("twitter")}>
+            <span className={style.svgContainer}>
+              <BsTwitterX />
+            </span>
+            <span className={style.BGa} />
+          </button>
+          <button className={style.Btn} onClick={() => signIn("github")}>
+            <span className={style.svgContainer}>
+              <AiFillGithub />
+            </span>
+            <span className={style.BGa} />
+          </button>
+        </div>
       </form>
     </>
   );

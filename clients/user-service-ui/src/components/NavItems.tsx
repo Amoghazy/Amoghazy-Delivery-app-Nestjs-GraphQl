@@ -28,7 +28,7 @@ export default function NavItems() {
   return (
     <div>
       <div className=" ">
-        {navItems.map((item, index) => (
+        {navItems.map((item) => (
           <Link
             key={item.url}
             href={item.url}

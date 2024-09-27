@@ -59,7 +59,11 @@ export default function Verification({
     (e.target as HTMLInputElement).select();
   };
 
-  const handlePaste = (e: any | React.MouseEvent<HTMLButtonElement>) => {
+  const handlePaste = (
+    e:
+      | React.ClipboardEvent<HTMLInputElement>
+      | React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
 
     let pastedText = "";
@@ -106,9 +110,12 @@ export default function Verification({
       localStorage.removeItem("token");
       toast.success("User activated successfully");
       setActiveState("login");
-    } catch (error: any) {
-     
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
   return (
@@ -148,6 +155,7 @@ export default function Verification({
         <button
           className="absolute bottom-5  btn w-11/12 btn-info text-white"
           onClick={handleVerify}
+          disabled={otp.join("").length !== otp.length || loading}
         >
           {" "}
           Verify

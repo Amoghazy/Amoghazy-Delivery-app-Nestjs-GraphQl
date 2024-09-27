@@ -1,12 +1,12 @@
 "use client"
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { BsFillMoonStarsFill } from "react-icons/bs";
 import { MdSunny } from "react-icons/md";
 
 const ThemeController = () => {
   const [theme, setTheme] = useState("myLightTheme");
 
-  const toggleTheme = (event:any) => {
+  const toggleTheme = (event: ChangeEvent<HTMLInputElement>) => {
     const newTheme = event.target.checked ? "dark" : "myLightTheme";
     setTheme(newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);

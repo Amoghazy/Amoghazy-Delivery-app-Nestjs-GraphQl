@@ -6,7 +6,6 @@ import {
   CreateUserDto,
   LoginUserDto,
   ResetPasswordDto,
-  UpdateUserDto,
 } from "./dto/user.dto";
 import {
   ActivationResponse,
@@ -17,7 +16,7 @@ import {
   ResetResponse,
 } from "./types/user.types";
 import { Response } from "express";
-import { HttpCode, HttpStatus, Res, UseGuards } from "@nestjs/common";
+import { HttpCode, HttpStatus, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "./gurds/auth.guard";
 
 @Resolver(() => User)
@@ -28,11 +27,11 @@ export class UsersResolver {
   @HttpCode(HttpStatus.CREATED)
   async createUser(
     @Args("createUserInput") createUserInput: CreateUserDto,
-    @Context() context: { res: Response }
+    @Context() context: { res: Response },
   ) {
     const registrationResponse = await this.usersService.createUser(
       createUserInput,
-      context.res
+      context.res,
     );
     const { activationToken } = registrationResponse;
     context.res.status(HttpStatus.CREATED);
@@ -46,9 +45,8 @@ export class UsersResolver {
       await this.usersService.activateUser(activationDto);
 
     const { user } = activationResponse;
-   
 
-    return {user};
+    return { user };
   }
   @Mutation(() => LoginResponse)
   async loginUser(@Args("loginUserInput") loginUserInput: LoginUserDto) {
@@ -69,13 +67,14 @@ export class UsersResolver {
     return res;
   }
   @Mutation(() => ForgetResponse)
-  async forgetPassword(@Args("email")email:string) {
-    return this.usersService.forgetPassword(email)
+  async forgetPassword(@Args("email") email: string) {
+    return this.usersService.forgetPassword(email);
   }
   @Mutation(() => ResetResponse)
-  async resetPassword(@Args("resetPasswordDto")resetPasswordDto:ResetPasswordDto) {
-   return  this.usersService.resetPassword(resetPasswordDto)
- 
+  async resetPassword(
+    @Args("resetPasswordDto") resetPasswordDto: ResetPasswordDto,
+  ) {
+    return this.usersService.resetPassword(resetPasswordDto);
   }
   @Query(() => [User])
   getAllUsers() {
@@ -86,6 +85,4 @@ export class UsersResolver {
   findUserById(@Args("id") id: string) {
     return this.usersService.findUserById(id);
   }
-
-  
 }

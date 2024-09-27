@@ -12,14 +12,13 @@ export default function AuthScreen({
 }) {
   const [activeSate, setActiveState] = useState("login");
 
-  const handelClose = (e: any) => {
-    if (e.target.id === "auth") setOpenAuth(false);
+  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLDivElement).id === "auth") setOpenAuth(false);
   };
-
   return (
     <>
       <div
-        onClick={handelClose}
+        onClick={handleClose}
         id="auth" 
         className="fixed top-0 left-0 right-0 bottom-0 h-screen z-50 flex items-center justify-center bg-black/60"
       >

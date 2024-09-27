@@ -15,6 +15,7 @@ export default function Header() {
         >
           FIMT{" "}
           <Image
+            unoptimized
             src={"/stellar-coin_825462.png"}
             alt="logo"
             width={25}
@@ -23,10 +24,10 @@ export default function Header() {
           />
         </Link>
         <NavItems />
-       <div>
-       <ProfileDrop />
-       <ThemeController/>
-       </div>
+        <div>
+          <ProfileDrop />
+          <ThemeController />
+        </div>
       </div>
     </header>
   );

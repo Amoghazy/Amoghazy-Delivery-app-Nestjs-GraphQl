@@ -1,12 +1,11 @@
 import style from "../css/login.module.css";
 
-import { FiAtSign, FiLock } from "react-icons/fi";
+import { FiAtSign,  } from "react-icons/fi";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { PiWarningFill } from "react-icons/pi";
-import { loginUser } from "../graphql/actions/login.action";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import { FORGET_PASSWORD } from "../graphql/actions/forget-password.action";
@@ -34,19 +33,23 @@ const ForgetPassword=({setActiveState,setOpenAuth}:{
       });
       const onSubmit = async (data: { email: string}) => {
         try {
-          const { data: response } = await forgetPassword({
+           await forgetPassword({
             variables: {
               email: data.email,
             },
           });
-    
+
           toast.success("Check Inbox email sent successfully");
-    
+
           reset()
           setOpenAuth(false)    
 
-        } catch (error: any) {
-          toast.error(error.message);
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          } else {
+            toast.error("An unknown error occurred");
+          }
         }
       };
 return <>
@@ -76,7 +79,7 @@ return <>
             setActiveState("login")
           }} className={` ${style.span} `}>Back To Login ?</span>
         </div>
-        <button type="submit" className={style.btnsub}>
+        <button disabled={loading} type="submit" className={style.btnsub}>
          Submit
         </button>
         </form>

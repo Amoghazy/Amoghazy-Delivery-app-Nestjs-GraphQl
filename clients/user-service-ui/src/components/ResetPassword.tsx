@@ -1,13 +1,12 @@
 "use client"
 import style from "../css/login.module.css";
 
-import { FiAtSign, FiLock } from "react-icons/fi";
+
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { PiWarningFill } from "react-icons/pi";
-import { loginUser } from "../graphql/actions/login.action";
 import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import { RESET_PASSWORD } from "../graphql/actions/reset-password.action";
@@ -42,7 +41,7 @@ const ResetPassword=({activeToken}:{activeToken:string})=>{
       });
       const onSubmit = async (data: { password: string}) => {
         try {
-          const { data: response } = await resetetPassword({
+          await resetetPassword({
             variables: {
               password: data.password,
               token:activeToken
@@ -53,9 +52,12 @@ const ResetPassword=({activeToken}:{activeToken:string})=>{
     
           reset()
 
-        } catch (error: any) {
-          toast.error(error.message);
-         
+        }catch (error: unknown) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          } else {
+            toast.error("An unknown error occurred");
+          }
         }
       };
 return <>

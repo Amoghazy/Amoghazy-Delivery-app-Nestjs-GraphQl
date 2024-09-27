@@ -36,7 +36,7 @@ export default function SignUp({
 }: {
   setActiveState: (activeSate: string) => void;
 }) {
-  const [registerUserMutation, { loading, error }] = useMutation(registerUser);
+  const [registerUserMutation, { loading,  }] = useMutation(registerUser);
   const [show, setShow] = useState(false);
   const {
     register,
@@ -67,9 +67,12 @@ export default function SignUp({
       toast.success("User created successfully");
       setActiveState("activation")
       reset()
-    } catch (error: any) {
-   
-      toast.error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     }
   };
   return (

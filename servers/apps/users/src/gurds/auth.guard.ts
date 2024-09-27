@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
   ) {}
   async canActivate(context: ExecutionContext) {
     const gqlContext = GqlExecutionContext.create(context);
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
     if (!accessToken || !refreshToken) {
       throw new UnauthorizedException(
-        "Access token and refresh token are required"
+        "Access token and refresh token are required",
       );
     }
     try {
@@ -47,7 +47,7 @@ export class AuthGuard implements CanActivate {
       Logger.error(`Error in AuthGuard: ${error.message}`);
       throw new UnauthorizedException("Unauthorized");
     }
-    
+
     return true;
   }
   private async updateAccessToken(req: any) {

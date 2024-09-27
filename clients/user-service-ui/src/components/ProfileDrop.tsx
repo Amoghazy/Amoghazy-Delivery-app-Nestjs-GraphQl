@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import AuthScreen from "../screens/AuthScreen";
 import useUser from "../hooks/useUser";
-import { CgUser, CgUserAdd } from "react-icons/cg";
+import { CgUser } from "react-icons/cg";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { signOut, useSession } from "next-auth/react";
 import { registerUser } from "../actions/register-user";
+import Image from "next/image";
 
 export default function ProfileDrop() {
   const [logedIn, setLoggedIn] = useState(false);
@@ -25,13 +26,20 @@ export default function ProfileDrop() {
     if (!loading) {
       setLoggedIn(!!user);
     }
-    if (data?.user) {
+    if (data?.user && data.user.email && data.user.name) {
       setLoggedIn(true);
-      addUser(data?.user)
+      addUser({
+        email: data.user.email,
+        password: "", // Provide a default value or handle this case appropriately
+        name: data.user.name,
+      });
     }
   }, [loading, user, data?.user]);
-  const addUser = async (user: any) => {
-    
+  const addUser = async (user: {
+    email: string;
+    password: string;
+    name: string;
+  }) => {
     await registerUser(user);
   };
 
@@ -47,7 +55,7 @@ export default function ProfileDrop() {
             >
               <div className="w-10 rounded-full">
                 {user?.avatar?.url || data?.user?.image ? (
-                  <img
+                  <Image 
                     alt="avatar"
                     src={data?.user ? data.user.image : user?.avatar?.url}
                   />

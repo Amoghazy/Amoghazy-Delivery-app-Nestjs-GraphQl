@@ -12,7 +12,7 @@ export default function Hero() {
                 ....
             </h1>
             <p className="mb-5">
-             we in FIMTO App for Food Delivery
+             We in FIMTO App for Food Delivery
             </p>
             <button className="btn btn-primary">Get Started</button>
           </div>

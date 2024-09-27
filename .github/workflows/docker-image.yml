@@ -13,38 +13,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Remove existing builder
-      run: docker buildx rm builder || true
+      - name: Remove existing builder
+        run: docker buildx rm builder || true
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Log in to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}  
-        password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
-    - name: Build and push first Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./servers
-        file: ./servers/Dockerfile
-        push: true
-        tags: |
-          ghcr.io/amoghazy/server-nestjs-image:latest
-          ghcr.io/amoghazy/server-nestjs-image:${{ github.sha }}
+      - name: Build and push first Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./servers
+          file: ./servers/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-server-nestjs:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-server-nestjs:${{ github.sha }}
 
-    - name: Build and push second Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./clients/user-service-ui
-        file: ./clients/user-service-ui/Dockerfile
-        push: true
-        tags: |
-          ghcr.io/amoghazy/ui-next-image:latest
-          ghcr.io/amoghazy/ui-next-image:${{ github.sha }}
+      - name: Build and push second Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./clients/user-service-ui
+          file: ./clients/user-service-ui/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-ui-next:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-ui-next:${{ github.sha }}
